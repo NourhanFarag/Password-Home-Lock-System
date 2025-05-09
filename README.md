@@ -51,7 +51,7 @@ Use **Proteus** with the provided `.pdsprj` file to:
 - Simulate locking/unlocking
 - Visualize I²C data flow
 
-[Simulation](simulation.jpg)
+![Simulation](simulation.jpg)
 
 ---
 
