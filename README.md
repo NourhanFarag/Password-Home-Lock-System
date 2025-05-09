@@ -1,21 +1,21 @@
 # 🔐 Embedded Password Home Lock System (8051 + I²C)
 
-## 📘 Overview
+## Overview
 This project is a **microcontroller-based smart home lock system** built using two **8051 (AT89C51)** microcontrollers that communicate via the **I²C protocol**. It features secure password entry, real-time feedback through an LCD display, and relay control for locking mechanisms. Designed for embedded systems learners and hobbyists, the project integrates both hardware and software design principles.
 
 ---
 
-## 🔩 System Components
+## System Components
 
-### 🧠 Microcontrollers
+### Microcontrollers
 - **AT89C51 (x2)**
   - **Master (Outside Unit)**: Handles user input and display.
   - **Slave (Inside Unit)**: Stores and verifies passwords, controls hardware.
 
-### 📡 Communication
+### Communication
 - **I²C Protocol** for reliable data transfer between master and slave.
 
-### 🔧 Peripherals
+### Peripherals
 - **4x4 Keypad** – Password input
 - **16x2 LCD** – Displays status messages
 - **Relay/Motor Driver** – Controls the door lock
@@ -24,7 +24,7 @@ This project is a **microcontroller-based smart home lock system** built using t
 
 ---
 
-## 🚀 How It Works
+## How It Works
 
 1. **User Input**: User enters a 4-digit password via the keypad.
 2. **Master Processing**: Master displays the password on the LCD and sends it via I²C to the slave.
@@ -43,7 +43,7 @@ This project is a **microcontroller-based smart home lock system** built using t
 
 ---
 
-## 🧪 Simulation & Testing
+## Simulation & Testing
 
 Use **Proteus** with the provided `.pdsprj` file to:
 - Test password entry
