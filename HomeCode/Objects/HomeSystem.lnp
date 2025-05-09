@@ -1,0 +1,12 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\keypad.obj",
+".\Objects\lcd.obj",
+".\Objects\delay.obj",
+".\Objects\leds.obj",
+".\Objects\button.obj",
+".\Objects\i2c.obj",
+".\Objects\password.obj",
+".\Objects\function.obj" 
+TO ".\Objects\HomeSystem" 
+PRINT(".\Listings\HomeSystem.m51")

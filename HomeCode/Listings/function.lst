@@ -1,0 +1,69 @@
+C51 COMPILER V9.60.7.0   FUNCTION                                                          04/26/2025 20:21:43 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE FUNCTION
+OBJECT MODULE PLACED IN .\Objects\function.obj
+COMPILER INVOKED BY: D:\PRO\Keil_v5\C51\BIN\C51.EXE function.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
+                    -ngs\function.lst) TABS(2) OBJECT(.\Objects\function.obj)
+
+line level    source
+
+   1          #include "function.h"
+   2          #include "lcd.h"
+   3          #include "keypad.h"
+   4          #include "delay.h"
+   5          #include "password.h"
+   6          
+   7          extern unsigned char correct_pass_flag;
+   8          
+   9          void Password_inputFromUser(void) {
+  10   1          unsigned char i = 0, key;
+  11   1          for (i = 0; i < 4; i++) entered_pass[i] = 0;
+  12   1      
+  13   1          i = 0;
+  14   1          while (1) {
+  15   2              key = Keypad_getKey();
+  16   2              if (key == '#') break;
+  17   2      
+  18   2              if (key >= '0' && key <= '9' && i < 4) {
+  19   3                  entered_pass[i] = key;
+  20   3                  LCD_writeChar(entered_pass[i]);
+  21   3                  i++;
+  22   3              } else if (key == '*' && i > 0) {
+  23   3                  i--;
+  24   3                  entered_pass[i] = 0;
+  25   3                  LCD_setCursor(1, i);
+  26   3                  LCD_writeChar(' ');
+  27   3                  LCD_setCursor(1, i);
+  28   3              }
+  29   2      
+  30   2              delay_ms(50);
+  31   2          }
+  32   1      
+  33   1          while (Keypad_getKey() != '#');
+  34   1      }
+  35          
+  36          void Password_checkCorrect(void) {
+  37   1          unsigned char i;
+  38   1          correct_pass_flag = 0;
+  39   1          for (i = 0; i < 4; i++) {
+  40   2              if (entered_pass[i] != saved_pass[i])
+  41   2                  correct_pass_flag = 1;
+  42   2          }
+  43   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    158    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+C51 COMPILER V9.60.7.0   FUNCTION                                                          04/26/2025 20:21:43 PAGE 2   
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

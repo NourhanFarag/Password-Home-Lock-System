@@ -1,0 +1,145 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              04/26/2025 20:21:42 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\PRO\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include "lcd.h"
+   3          #include "keypad.h"
+   4          #include "leds.h"
+   5          #include "delay.h"
+   6          #include "password.h"
+   7          #include "function.h"
+   8          #include "i2c.h"
+   9          #include "button.h"
+  10          
+  11          unsigned char correct_pass_flag = 0;
+  12          unsigned char reEnter_pass_flag = 0;
+  13          
+  14          void main() {
+  15   1          unsigned char i;
+  16   1          static bit welcome_shown = 0;
+  17   1      
+  18   1          LCD_init();
+  19   1          I2C_init();
+  20   1          LED_setRed(LED_OFF);
+  21   1          LED_setGreen(LED_OFF);
+  22   1      
+  23   1          while (1) {
+  24   2              if (Button_readStart() == BUTTON_PRESSED) {
+  25   3                  welcome_shown = 0;
+  26   3      
+  27   3                  LCD_clear();
+  28   3                  LCD_writeText("Enter Password:");
+  29   3                  LCD_setCursor(1, 0);
+  30   3                  Password_inputFromUser();
+  31   3                  Password_checkCorrect();
+  32   3      
+  33   3                  if (correct_pass_flag == 0) {
+  34   4                      LED_setGreen(LED_ON);
+  35   4                      LED_setRed(LED_OFF);
+  36   4                      num_ofCorrect_Password = 3;
+  37   4      
+  38   4                      Password_successAction();
+  39   4                      I2C_start();
+  40   4                      I2C_write('S');
+  41   4                      I2C_stop();
+  42   4                      delay_ms(300);
+  43   4                  } else {
+  44   4                      num_ofCorrect_Password--;
+  45   4                      LED_setRed(LED_ON);
+  46   4                      LED_setGreen(LED_OFF);
+  47   4      
+  48   4                      while (num_ofCorrect_Password != 0) {
+  49   5                          LCD_clear();
+  50   5                          LCD_writeText("WRONG PASS");
+  51   5                          delay_ms(300);
+  52   5      
+  53   5                          LCD_clear();
+  54   5                          LCD_writeText("Attempts Left:");
+C51 COMPILER V9.60.7.0   MAIN                                                              04/26/2025 20:21:42 PAGE 2   
+
+  55   5                          LCD_writeChar(num_ofCorrect_Password + '0');
+  56   5                          delay_ms(300);
+  57   5      
+  58   5                          LCD_clear();
+  59   5                          LCD_writeText("Enter Password:");
+  60   5                          LCD_setCursor(1, 0);
+  61   5                          Password_inputFromUser();
+  62   5                          Password_checkCorrect();
+  63   5      
+  64   5                          if (correct_pass_flag == 1) {
+  65   6                              num_ofCorrect_Password--;
+  66   6                              if (num_ofCorrect_Password == 1) {
+  67   7                                  LED_setRed(LED_ON);
+  68   7                              }
+  69   6                              delay_ms(100);
+  70   6                          } else if (correct_pass_flag == 0) {
+  71   6                              reEnter_pass_flag = 1;
+  72   6                              num_ofCorrect_Password = 3;
+  73   6                              break;
+  74   6                          }
+  75   5                      }
+  76   4                  }
+  77   3      
+  78   3                  if (reEnter_pass_flag == 1) {
+  79   4                      reEnter_pass_flag = 0;
+  80   4                      LED_setGreen(LED_ON);
+  81   4                      LED_setRed(LED_OFF);
+  82   4      
+  83   4                      Password_successAction();
+  84   4                      I2C_start();
+  85   4                      I2C_write('S');
+  86   4                      I2C_stop();
+  87   4                      delay_ms(300);
+  88   4                  }
+  89   3      
+  90   3                  if (num_ofCorrect_Password == 0) {
+  91   4                      LCD_clear();
+  92   4                      LCD_writeText("ACCESS DENIED");
+  93   4                      LCD_setCursor(1, 0);
+  94   4                      LCD_writeText("INTRUDER ALERT!");
+  95   4                      delay_ms(1000);
+  96   4      
+  97   4                      
+  98   4                      for (i = 0; i < 6; i++) {
+  99   5                          if (i % 2 == 0) {
+ 100   6                              LED_setRed(LED_ON);
+ 101   6                              LED_setGreen(LED_OFF);
+ 102   6                          } else {
+ 103   6                              LED_setRed(LED_OFF);
+ 104   6                              LED_setGreen(LED_ON);
+ 105   6                          }
+ 106   5                          delay_ms(300);
+ 107   5                      }
+ 108   4      
+ 109   4                      while (1); // System locked; manual reset needed
+ 110   4                  }
+ 111   3              } else if (!welcome_shown) {
+ 112   3                  LCD_clear();
+ 113   3                  LCD_writeText("Welcome Home -_-");
+ 114   3                  welcome_shown = 1;
+ 115   3              }
+ 116   2          }
+C51 COMPILER V9.60.7.0   MAIN                                                              04/26/2025 20:21:42 PAGE 3   
+
+ 117   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    364    ----
+   CONSTANT SIZE    =     89    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

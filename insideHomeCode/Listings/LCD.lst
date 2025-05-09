@@ -1,0 +1,84 @@
+C51 COMPILER V9.60.7.0   LCD                                                               04/26/2025 20:19:41 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD
+OBJECT MODULE PLACED IN .\Objects\LCD.obj
+COMPILER INVOKED BY: D:\PRO\Keil_v5\C51\BIN\C51.EXE LCD.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\L
+                    -CD.lst) TABS(2) OBJECT(.\Objects\LCD.obj)
+
+line level    source
+
+   1          #include "lcd.h"
+   2          
+   3          void LCD_init(void) {
+   4   1          LCD_RS = 0;
+   5   1          LCD_En = 0;
+   6   1          delay_ms(20);  // Required startup delay
+   7   1          LCD_DATA_PORT = 0x00;
+   8   1      
+   9   1          LCD_sendCommand(LCD_TWO_LINES_EIGHT_BITS_MODE); // 8-bit, 2 line
+  10   1          LCD_sendCommand(LCD_CURSOR_OFF);                // Cursor off
+  11   1          LCD_sendCommand(LCD_CLEAR_COMMAND);             // Clear LCD
+  12   1      }
+  13          
+  14          void LCD_sendCommand(unsigned char command) {
+  15   1          LCD_RS = 0;      // Command mode
+  16   1          delay_ms(1);
+  17   1          LCD_En = 1;      // Enable high
+  18   1          delay_ms(1);
+  19   1          LCD_DATA_PORT = command;
+  20   1          delay_ms(1);
+  21   1          LCD_En = 0;      // Enable low
+  22   1          delay_ms(1);
+  23   1      }
+  24          
+  25          void LCD_displayCharacter(unsigned char my_data) {
+  26   1          LCD_RS = 1;      // Data mode
+  27   1          delay_ms(1);
+  28   1          LCD_En = 1;      // Enable high
+  29   1          delay_ms(1);
+  30   1          LCD_DATA_PORT = my_data;
+  31   1          delay_ms(1);
+  32   1          LCD_En = 0;      // Enable low
+  33   1          delay_ms(1);
+  34   1      }
+  35          
+  36          void LCD_displayString(const char *Str) {
+  37   1          unsigned char i;
+  38   1          for (i = 0; Str[i] != '\0'; i++) {
+  39   2              LCD_displayCharacter(Str[i]);
+  40   2          }
+  41   1      }
+  42          
+  43          void LCD_clearScreen(void) {
+  44   1          LCD_sendCommand(LCD_CLEAR_COMMAND);
+  45   1      }
+  46          
+  47          void LCD_moveCursor(unsigned char row, unsigned char col) {
+  48   1          unsigned char memory_address;
+  49   1      
+  50   1          switch (row) {
+  51   2              case 0: memory_address = col; break;
+  52   2              case 1: memory_address = col + 0x40; break;
+  53   2              case 2: memory_address = col + 0x10; break;
+  54   2              case 3: memory_address = col + 0x50; break;
+C51 COMPILER V9.60.7.0   LCD                                                               04/26/2025 20:19:41 PAGE 2   
+
+  55   2              default: memory_address = col; break;
+  56   2          }
+  57   1          LCD_sendCommand(memory_address | LCD_SET_CURSOR_LOCATION);
+  58   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    196    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       7
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
